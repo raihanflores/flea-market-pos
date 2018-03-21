@@ -1,9 +1,9 @@
 import React from "react";
 
-const Topic = ({ match }) => (
+const Sick = ({ match }) => (
   <div>
     <h3>{match.params.topicId}</h3>
   </div>
 );
 
-export default Topic;
+export default Sick;

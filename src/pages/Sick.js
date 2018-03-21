@@ -2,9 +2,9 @@ import React from "react";
 import Topic from "./Topic";
 import { Route, Link } from "react-router-dom";
 
-const Topics = ({ match }) => (
+const Sick = ({ match }) => (
   <div>
-    <h2>Topics</h2>
+    <h2>Sick</h2>
     <ul>
       <li>
         <Link to={`${match.url}/rendering`}>Rendering with React</Link>
@@ -31,4 +31,4 @@ const Topics = ({ match }) => (
   </div>
 );
 
-export default Topics;
+export default Sick;
