@@ -1,27 +1,28 @@
 import React from "react";
 
+const datasource = {
+  getList: () => {
+    return [
+      { filename: "attendance.pdf" },
+      { filename: "leaves.pdf" },
+      { filename: "conduct.pdf" },
+      { filename: "holiday.pdf" }
+    ];
+  }
+};
+
 const Announcements = () => (
   <div>
     <center>
       <h2>Announcements</h2>
     </center>
-
-    <a href="/announcements/attendance.pdf" target="_blank">
-      attendance.pdf
-    </a>
-    <br />
-    <a href="/announcements/leaves.pdf" target="_blank">
-      leaves.pdf
-    </a>
-    <br />
-    <a href="/announcements/conduct.pdf" target="_blank">
-      conduct.pdf
-    </a>
-    <br />
-    <a href="/media/pdf/holiday.pdf">
-      holiday.pdf
-    </a>
-
+    {datasource.getList().map(data => {
+      return (
+        <div>
+          <a href={"/media/pdf/" + data.filename}>{data.filename}</a>
+        </div>
+      );
+    })}
   </div>
 );
 

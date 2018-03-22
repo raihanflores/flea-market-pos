@@ -1,7 +1,20 @@
 import React from "react";
+import webreq from "../helpers/webrequest";
+
+const gqlrequest = {
+  post: () => {
+    let result = webreq({
+      query:
+        "{ staffs { staffuserid username staffname addr1 addr2 city zip state active country usergroup } }"
+    });
+
+    return result;
+  }
+};
 
 const Staff = () => (
   <div>
+    {gqlrequest.post()}
     <table class="table table-striped">
       <thead>
         <tr>
