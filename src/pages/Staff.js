@@ -1,51 +1,59 @@
-import React from "react";
-import webreq from "../helpers/webrequest";
+import React, { Component } from "react";
+import axios from "axios";
 
-const gqlrequest = {
-  post: () => {
-    let result = webreq({
-      query:
-        "{ staffs { staffuserid username staffname addr1 addr2 city zip state active country usergroup } }"
-    });
-
-    return result;
+class Staff extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
   }
-};
 
-const Staff = () => (
-  <div>
-    {gqlrequest.post()}
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">First</th>
-          <th scope="col">Last</th>
-          <th scope="col">Handle</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Larry</td>
-          <td>the Bird</td>
-          <td>@twitter</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-);
+  componentDidMount() {
+    var self = this;
+    axios
+      .post("http://localhost:3000/graphql", {
+        query:
+          "{ staffs { staffuserid username staffname addr1 addr2 city zip state active country usergroup } }"
+      })
+      .then(function(response) {
+        console.log(response.data.data.staffs);
+        self.setState({
+          staffs: response.data.data.staffs
+        });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
+
+  render() {
+    return (
+      <div>
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.staffs
+              ? this.state.staffs.map(data => {
+                  return (
+                    <tr key={data.staffuserid}>
+                      <th scope="row">{data.staffuserid}</th>
+                      <td>{data.staffname.toUpperCase()}</td>
+                      <td>{data.active === "Y" ? "ACTIVE" : "INACTIVE"}</td>
+                    </tr>
+                  );
+                })
+              : null
+            }
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+}
 
 export default Staff;
