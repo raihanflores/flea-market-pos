@@ -1,6 +1,14 @@
 import React, { Component } from "react";
 import axios from "axios";
 
+const USERGROUP = {
+  1: "Admin",
+  2: "CWH_Admin",
+  3: "Agent",
+  4: "Dev",
+  5: "Semi Admin"
+};
+
 class Staff extends Component {
   constructor(props) {
     super(props);
@@ -33,22 +41,31 @@ class Staff extends Component {
             <tr>
               <th scope="col">#</th>
               <th scope="col">Name</th>
+              <th scope="col">Group</th>
               <th scope="col">Status</th>
             </tr>
           </thead>
           <tbody>
-            {this.state.staffs
-              ? this.state.staffs.map(data => {
-                  return (
-                    <tr key={data.staffuserid}>
-                      <th scope="row">{data.staffuserid}</th>
-                      <td>{data.staffname.toUpperCase()}</td>
-                      <td>{data.active === "Y" ? "ACTIVE" : "INACTIVE"}</td>
-                    </tr>
-                  );
-                })
-              : null
-            }
+            {this.state.staffs ? (
+              this.state.staffs.map(data => {
+                return (
+                  <tr key={data.staffuserid}>
+                    <th scope="row">{data.staffuserid}</th>
+                    <td>{data.staffname.toUpperCase()}</td>
+                    <td>{USERGROUP[data.usergroup].toUpperCase()}</td>
+                    <td>{data.active === "Y" ? "ACTIVE" : "INACTIVE"}</td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan="4">
+                  <center>
+                    <label>Fetching Data...</label>
+                  </center>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
