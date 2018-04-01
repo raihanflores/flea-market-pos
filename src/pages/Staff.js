@@ -43,6 +43,11 @@ class Staff extends Component {
               <th scope="col">Name</th>
               <th scope="col">Group</th>
               <th scope="col">Status</th>
+              <th scope="col">VL</th>
+              <th scope="col">SL</th>
+              <th scope="col">BL</th>
+              <th scope="col">Requests</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -54,12 +59,20 @@ class Staff extends Component {
                     <td>{data.staffname.toUpperCase()}</td>
                     <td>{USERGROUP[data.usergroup].toUpperCase()}</td>
                     <td>{data.active === "Y" ? "ACTIVE" : "INACTIVE"}</td>
+                    <td>7.5</td>
+                    <td>7.5</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>
+                      <button className="btn btn-primary">Approved</button>
+                      <button className="btn btn-danger">Declined</button>
+                    </td>
                   </tr>
                 );
               })
             ) : (
               <tr>
-                <td colSpan="4">
+                <td colSpan="9">
                   <center>
                     <label>Fetching Data...</label>
                   </center>

@@ -19,7 +19,7 @@ const Announcements = () => (
     {datasource.getList().map(data => {
       return (
         <div>
-          <a href={"/media/pdf/" + data.filename}>{data.filename}</a>
+          <a href={"/media/pdf/" + data.filename} target="_blank">{data.filename}</a>
         </div>
       );
     })}
