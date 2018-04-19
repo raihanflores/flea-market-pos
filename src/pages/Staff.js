@@ -1,14 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-const USERGROUP = {
-  1: "Admin",
-  2: "CWH_Admin",
-  3: "Agent",
-  4: "Dev",
-  5: "Semi Admin"
-};
-
 class Staff extends Component {
   constructor(props) {
     super(props);
@@ -18,17 +10,38 @@ class Staff extends Component {
   componentDidMount() {
     var self = this;
     axios
-      .post("http://localhost:3000/graphql", {
-        query:
-          "{ staffs { staffuserid username staffname addr1 addr2 city zip state active country usergroup } }"
-      })
-      .then(function(response) {
-        console.log(response.data.data.staffs);
+      .post("https://us-west-2.api.scaphold.io/graphql/flea", {
+        query: `query GetAllStaff {
+          viewer {
+            allStaff {
+              edges {
+                node {
+                  id
+                  code
+                  username
+                  password
+                  fname
+                  lname
+                  address
+                  landline
+                  mobile
+                  permission
+                }
+              }
+            }
+          }
+        }`
+      }, {
+          headers: {
+            Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MjU0NDQwOTQsImlhdCI6MTUyNDE0ODA5NCwiYXVkIjoiMTE4ZjNlMWItZDUyYS00MGE3LTkwNzktM2U0Nzk0NDM5OGZhIiwiaXNzIjoiaHR0cHM6Ly9zY2FwaG9sZC5pbyIsInN1YiI6IjIifQ.GZ-DYA8uQPneIyRL-fYdXo0y-R6_TW74ZkjbmWhrb-g"
+          }
+        })
+      .then(function (response) {
         self.setState({
-          staffs: response.data.data.staffs
+          staffs: response.data.data.viewer.allStaff.edges
         });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   }
@@ -39,14 +52,13 @@ class Staff extends Component {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">Group</th>
-              <th scope="col">Status</th>
-              <th scope="col">VL</th>
-              <th scope="col">SL</th>
-              <th scope="col">BL</th>
-              <th scope="col">Requests</th>
+              <th scope="col">Code</th>
+              <th scope="col">First Name</th>
+              <th scope="col">Last Name</th>
+              <th scope="col">Username</th>
+              <th scope="col">Landline</th>
+              <th scope="col">Mobile</th>
+              <th scope="col">Permission</th>
               <th scope="col">Actions</th>
             </tr>
           </thead>
@@ -54,31 +66,30 @@ class Staff extends Component {
             {this.state.staffs ? (
               this.state.staffs.map(data => {
                 return (
-                  <tr key={data.staffuserid}>
-                    <th scope="row">{data.staffuserid}</th>
-                    <td>{data.staffname.toUpperCase()}</td>
-                    <td>{USERGROUP[data.usergroup].toUpperCase()}</td>
-                    <td>{data.active === "Y" ? "ACTIVE" : "INACTIVE"}</td>
-                    <td>7.5</td>
-                    <td>7.5</td>
-                    <td>1</td>
-                    <td>0</td>
+                  <tr key={data.node.id}>
+                    <th scope="row">{data.node.code}</th>
+                    <td>{data.node.fname.toUpperCase()}</td>
+                    <td>{data.node.lname.toUpperCase()}</td>
+                    <td>{data.node.username}</td>
+                    <td>{data.node.landline}</td>
+                    <td>{data.node.mobile}</td>
+                    <td>{data.node.permission}</td>
                     <td>
-                      <button className="btn btn-primary">Approved</button>
-                      <button className="btn btn-danger">Declined</button>
+                      <button className="btn btn-primary btn-sm">Edit</button>
+                      <button className="btn btn-danger btn-sm">Delete</button>
                     </td>
                   </tr>
                 );
               })
             ) : (
-              <tr>
-                <td colSpan="9">
-                  <center>
-                    <label>Fetching Data...</label>
-                  </center>
-                </td>
-              </tr>
-            )}
+                <tr>
+                  <td colSpan="9">
+                    <center>
+                      <label>Fetching Data...</label>
+                    </center>
+                  </td>
+                </tr>
+              )}
           </tbody>
         </table>
       </div>
